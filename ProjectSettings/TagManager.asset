@@ -3,7 +3,42 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - FOOD
+  - BOID
+  - SCARED
+  - FREE_GUTS
+  - NO_ITEM
+  - MATCHES
+  - DEPOSITPOINT
+  - NERD
+  - RED_BOID
+  - PREDATOR
+  - MOUSE
+  - DROPPED
+  - REPULSIVE
+  - BATCAT
+  - CHEESE
+  - RED_TAG
+  - ATTACKER
+  - BUBBLE
+  - ITEM
+  - WOOD
+  - BLUE_BOID
+  - TRASH
+  - CHICK
+  - SEED
+  - GHOST
+  - MONEY
+  - NEWSPAPER
+  - WANDERPOINT
+  - TRASH_CAN
+  - BEER
+  - HEN
+  - NO_SEED
+  - TARGETLOC
+  - TRAPPED_MOUSE
+  - COHESIVE
   layers:
   - Default
   - TransparentFX
@@ -11,7 +46,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Food
   - 
   - 
   - 

@@ -6,14 +6,12 @@ namespace Steerings {
     public class Food : MonoBehaviour
     {
         public FoodSpawner mySpawner;
-        private void OnEnable() {
-            StartCoroutine(SetPos());
-        }
-        
-        IEnumerator SetPos()
-        {
-            while(mySpawner == null) yield return null;
-            mySpawner.SetPosition(gameObject);
+        private void OnDisable() {
+            if(!mySpawner.Equals(null))
+            {
+                FoodSpawner.SetPosition(gameObject,mySpawner);
+                transform.SetParent(mySpawner.transform);
+            }
         }
     }
 }
