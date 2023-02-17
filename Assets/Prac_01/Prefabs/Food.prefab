@@ -98,7 +98,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56bd2b8f14038dc489c2ca0df70ff221, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 0.5
+  radius: 0.15
   mySpawner: {fileID: 0}
   whatIsFood:
     serializedVersion: 2

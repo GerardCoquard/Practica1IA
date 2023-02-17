@@ -12,7 +12,7 @@ namespace Steerings {
         private void OnDisable() {
             if(!mySpawner.Equals(null) && !quitting)
             {
-                StartCoroutine(FoodSpawner.SetPosition(gameObject,mySpawner,radius,whatIsFood));
+                FoodSpawner.SetPosition(gameObject,mySpawner,radius,whatIsFood);
             }
         }
         private void OnApplicationQuit() {

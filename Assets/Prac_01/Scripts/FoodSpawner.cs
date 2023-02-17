@@ -20,13 +20,15 @@ namespace Steerings {
             }
         }
         private void Start() {
+            List<GameObject> foods = new List<GameObject>();
             for (int i = 0; i < amountOfFood; i++)
             {
                 GameObject f = Instantiate(prefab);
                 Food food = f.GetComponent<Food>();
                 food.mySpawner = this;
-                StartCoroutine(FoodSpawner.SetPosition(f,this,food.radius,food.whatIsFood));
+                foods.Add(f);
             }
+            StartCoroutine(SetAll(foods));
         }
         static bool Overlapping(Vector3 point, float _radius, LayerMask foodLayer)
         {
@@ -39,10 +41,19 @@ namespace Steerings {
             }
             return col.Length > 0;
         }
-        public static IEnumerator SetPosition(GameObject target, FoodSpawner spawner, float _radius, LayerMask foodLayer)
+        IEnumerator SetAll(List<GameObject> foods)
         {
             bool firstFrame = false;
             while(firstFrame) {firstFrame = false; yield return null;}
+
+            foreach (GameObject item in foods)
+            {
+                Food f = item.GetComponent<Food>();
+                SetPosition(item,f.mySpawner,f.radius,f.whatIsFood);
+            }
+        }
+        public static void SetPosition(GameObject target, FoodSpawner spawner, float _radius, LayerMask foodLayer)
+        {
             int n = 0;
             int angle = Random.Range(0,361);
             float distance = Random.Range(0f,spawner.radius);
