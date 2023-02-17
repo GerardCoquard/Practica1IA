@@ -153,7 +153,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   radius: 6
-  amountOfFood: 100
+  amountOfFood: 200
   prefab: {fileID: 650144329212971413, guid: 760be9f313fd49b499e5bab1e0a10b94, type: 3}
 --- !u!4 &265843455
 Transform:
