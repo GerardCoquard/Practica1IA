@@ -6,6 +6,7 @@ using Steerings;
 public class FSM_Fish : FiniteStateMachine
 {
     FlockingAround flockingAround;
+    Blackboard_Fish_Global blackboard_global;
 
     public override void OnEnter()
     {
@@ -30,10 +31,39 @@ public class FSM_Fish : FiniteStateMachine
         State varName = new State("StateName",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}  
+            () => { }  // write on exit logic inisde {}
         );
 
          */
+
+        State WanderingAround = new State("Wandering Around",
+            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { }  // write on exit logic inisde {}
+        );
+
+        State ReachingFood = new State("Reaching Food",
+            () => { }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { }  // write on exit logic inisde {}
+        );
+
+        State GoingHome = new State("Going Home",
+            () => { }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { }  // write on exit logic inisde {}
+        );
+
+        State Eating = new State("Eating",
+            () => { }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { }  // write on exit logic inisde {}
+        );
+        State WaitingForAllAte = new State("Waiting For All Ate",
+            () => { }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { }  // write on exit logic inisde {}
+        );
 
 
         /* STAGE 2: create the transitions with their logic(s)
