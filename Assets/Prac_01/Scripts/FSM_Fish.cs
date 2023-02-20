@@ -212,7 +212,6 @@ public class FSM_Fish : FiniteStateMachine
         AddTransition(GoingHome,HomeToReach,ReachingHome);
         AddTransition(GoingHome,HomeToFlee,Fleeing);
         AddTransition(ReachingHome,ReachToEat,Eating);
-        AddTransition(ReachingHome,ReachToFlee,Fleeing);
         AddTransition(Eating,EatToWait,WaitingForAllAte);
         AddTransition(WaitingForAllAte,WaitToWander,WanderingAround);
         AddTransition(Fleeing,FleeToPrevious,PreviousState);
