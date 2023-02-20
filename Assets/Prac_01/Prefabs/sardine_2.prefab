@@ -12,6 +12,8 @@ GameObject:
   - component: {fileID: 6845931278036688117}
   - component: {fileID: 5297458298150434729}
   - component: {fileID: 4789269928583199397}
+  - component: {fileID: 1496813816675222476}
+  - component: {fileID: 1633129575309525046}
   m_Layer: 0
   m_Name: sardine_2
   m_TagString: BOID
@@ -117,8 +119,8 @@ MonoBehaviour:
   cohesionThreshold: 30
   coneOfVisionAngle: 270
   applyVision: 0
-  cohesionWeight: 0.3
-  repulsionWeight: 0.5
+  cohesionWeight: 0.2
+  repulsionWeight: 0.6
   alignmentWeight: 0.2
   addWanderIfZero: 0
   wanderRate: 30
@@ -147,10 +149,39 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6845931278036688118}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a3facbb136ce00f49a2c7deadcf53f0c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rotationalPolicy: 1
   attractor: {fileID: 0}
+--- !u!114 &1496813816675222476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6845931278036688118}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51021b399ad270942b4928c10c0a1e71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationalPolicy: 1
+  target: {fileID: 0}
+--- !u!114 &1633129575309525046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6845931278036688118}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 823459bfcabf59e4bbb7d30c1033e0ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fsm: {fileID: 11400000, guid: e217c6cec0329f846ace04a02df35c3d, type: 2}
+  currentState: 
+  textMesh: {fileID: 0}

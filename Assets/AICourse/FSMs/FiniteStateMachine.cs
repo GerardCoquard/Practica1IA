@@ -17,6 +17,7 @@ namespace FSMs
         private Dictionary<IState, List<TranstionDestinationPair>> transitions;
 
         public IState currentState;
+        public IState previousState;
         protected IState initialState;  // this must be set at construction (OnConstruction) time
 
         // a FiniteStateMachine recives a gameObject from the executor or from its parent "fsm"
@@ -77,6 +78,7 @@ namespace FSMs
                         pair.transition.OnTrigger();
                         // Exit current state, change state, enter new state
                         currentState.OnExit();
+                        previousState = currentState;
                         currentState = pair.destination;
                         currentState.OnEnter();
                         break; // Exit the foreach loop. Do not process more transitions
@@ -100,6 +102,7 @@ namespace FSMs
         // BEWARE redefinitions MUST call base.super
         public virtual void OnEnter() {
             currentState = initialState;
+            previousState = currentState;
             currentState.OnEnter();
         }
 
