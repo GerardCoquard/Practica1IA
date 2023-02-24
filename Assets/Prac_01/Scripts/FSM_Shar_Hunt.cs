@@ -11,6 +11,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
     SteeringContext context;
     WanderAround wander;
     Arrive arrive;
+    Seek seek;
     SHARK_BLAKCBOARD blackboard;
     GameObject theFish;
     float timeEating;
@@ -23,6 +24,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
         context = GetComponent<SteeringContext>();
         wander = GetComponent<WanderAround>();
         arrive = GetComponent<Arrive>();
+        seek = GetComponent<Seek>();
         blackboard = GetComponent<SHARK_BLAKCBOARD>();
         base.OnEnter(); // do not remove
     }
@@ -53,13 +55,15 @@ public class FSM_Shar_Hunt : FiniteStateMachine
 
         State GoHuntFish = new State("GoHuntFish",
             () => {
+                context.maxAcceleration *= 2;
                 context.maxSpeed *= 2f;
-                arrive.target = theFish;
-                arrive.enabled = true;
+                seek.target = theFish;
+                seek.enabled = true;
             }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { 
-                arrive.enabled = false;
+                seek.enabled = false;
+                context.maxAcceleration /= 2;
                 context.maxSpeed /= 2f;
             }  // write on exit logic inisde {}  
         );
