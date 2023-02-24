@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class SHARK_BLAKCBOARD : MonoBehaviour
 {
-    public float fishDetectableRadius = 60; // within this radius worms are detected
-    public float fishReachedRadius = 12;    // at this distace worm is eatable
-    public float timeHiding = 5.0f;
+    public float fishDetectableRadius = 5; // within this radius worms are detected
+    public float fishReachedRadius = 1;    // at this distace worm is eatable
+    public float homeReachedRadius = 5;
+    public float timeToEat = 3.0f;
     public float soundDetectableRadius = 300;
     public float soundReachedRadius = 20;
 
@@ -16,7 +17,7 @@ public class SHARK_BLAKCBOARD : MonoBehaviour
     void Awake()
     {
         attractor = GameObject.Find("Attractor");
-        home = GameObject.Find("home");
+        home = GameObject.Find("Cave");
     }
 
     private void Update()

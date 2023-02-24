@@ -9,6 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 61eabcfcf741b4b42ab0b580fe04f482, type: 3}
-  m_Name: FSM_Shark
+  m_Script: {fileID: 11500000, guid: 3a3118d43c383d7449c0c965d4757471, type: 3}
+  m_Name: FSM_Shark_No_Hunt
   m_EditorClassIdentifier: 

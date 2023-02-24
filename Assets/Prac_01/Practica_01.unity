@@ -526,11 +526,6 @@ GameObject:
   m_Component:
   - component: {fileID: 895507587}
   - component: {fileID: 895507593}
-  - component: {fileID: 895507592}
-  - component: {fileID: 895507591}
-  - component: {fileID: 895507590}
-  - component: {fileID: 895507589}
-  - component: {fileID: 895507588}
   m_Layer: 0
   m_Name: Graphics
   m_TagString: Untagged
@@ -553,122 +548,6 @@ Transform:
   m_Father: {fileID: 2089036637}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
---- !u!114 &895507588
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895507586}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e84d2230696b2ad4faaab4976079504e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationalPolicy: 1
-  attractor: {fileID: 0}
---- !u!114 &895507589
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895507586}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0b1c6fa0d5ba45c4eb509c1ad6e53e63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  rotationalPolicy: 1
-  target: {fileID: 0}
---- !u!114 &895507590
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895507586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f9e327841d971e469fd08ddd0987658, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fishDetectableRadius: 60
-  fishReachedRadius: 12
-  timeHiding: 5
-  soundDetectableRadius: 300
-  soundReachedRadius: 20
-  attractor: {fileID: 0}
-  home: {fileID: 0}
---- !u!114 &895507591
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895507586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15fadfb23a909584e8ff82b91a0977c9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxAcceleration: 40
-  maxSpeed: 10
-  clipVelocity: 1
-  maxAngularAcceleration: 360
-  maxAngularSpeed: 90
-  clipAngularSpeed: 1
-  timeToDesiredSpeed: 0.1
-  closeEnoughRadius: 1
-  slowdownRadius: 5
-  timeToDesiredAngularSpeed: 0.1
-  closeEnoughAngle: 2
-  slowDownAngle: 10
-  maxPredictionTime: 3
-  showFutureTargetGizmos: 0
-  idTag: 
-  repulsionThreshold: 15
-  cohesionThreshold: 30
-  coneOfVisionAngle: 270
-  applyVision: 0
-  cohesionWeight: 0.3
-  repulsionWeight: 0.5
-  alignmentWeight: 0.2
-  addWanderIfZero: 1
-  wanderRate: 30
-  wanderRadius: 10
-  wanderOffset: 20
-  showWanderGizmos: 0
-  wanderTargetOrientation: 0
-  seekWeight: 0.3
-  lookAheadLength: 10
-  avoidDistance: 12
-  secondaryWhiskerAngle: 30
-  secondaryWhiskerRatio: 0.7
-  perseveranceTime: 0
-  showAvoidanceGizmos: 0
-  perseveranceElapsed: 0
-  persevering: 0
-  avoidanceAcceleration: {x: 0, y: 0, z: 0}
-  velocity: {x: 0, y: 0, z: 0}
-  speed: 0
-  angularSpeed: 0
-  groupManager: {fileID: 0}
---- !u!114 &895507592
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 895507586}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 823459bfcabf59e4bbb7d30c1033e0ef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fsm: {fileID: 11400000, guid: 048dc3caca8d1304091ab8260fb8ca93, type: 2}
-  currentState: 
-  textMesh: {fileID: 0}
 --- !u!212 &895507593
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -737,7 +616,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1354559249
 Transform:
   m_ObjectHideFlags: 0
@@ -1344,7 +1223,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &2089036634
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1357,9 +1236,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f9e327841d971e469fd08ddd0987658, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fishDetectableRadius: 60
-  fishReachedRadius: 12
-  timeHiding: 5
+  fishDetectableRadius: 30
+  fishReachedRadius: 1
+  homeReachedRadius: 5
+  timeToEat: 3
   soundDetectableRadius: 300
   soundReachedRadius: 20
   attractor: {fileID: 0}
@@ -1460,7 +1340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823459bfcabf59e4bbb7d30c1033e0ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fsm: {fileID: 11400000, guid: 048dc3caca8d1304091ab8260fb8ca93, type: 2}
+  fsm: {fileID: 11400000, guid: b514f125a01d22d4a9b452dc64e01e04, type: 2}
   currentState: 
   textMesh: {fileID: 0}
 --- !u!114 &2089036640
