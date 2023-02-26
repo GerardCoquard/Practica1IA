@@ -2,27 +2,18 @@ using FSMs;
 using UnityEngine;
 using Steerings;
 
-[CreateAssetMenu(fileName = "FSM_FishFlee", menuName = "Finite State Machines/FSM_FishFlee", order = 1)]
-public class FSM_FishFlee : FiniteStateMachine
+[CreateAssetMenu(fileName = "FSM_Shark", menuName = "Finite State Machines/FSM_Shark", order = 1)]
+public class FSM_Shark : FiniteStateMachine
 {
     /* Declare here, as attributes, all the variables that need to be shared among
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
-    Flee flee;
-    SteeringContext context;
-    Blackboard_Fish_Global blackboard_global;
-    float elpasedTime;
-    IState lastState;
 
     public override void OnEnter()
     {
         /* Write here the FSM initialization code. This code is execute every time the FSM is entered.
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
-        flee = GetComponent<Flee>();
-        context = GetComponent<SteeringContext>();
-        blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
-        flee.target = blackboard_global.shark;
         base.OnEnter(); // do not remove
     }
 
@@ -47,16 +38,6 @@ public class FSM_FishFlee : FiniteStateMachine
         );
 
          */
-        State Fleeing = new State("Fleeing",
-            () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
-            () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
-        );
-        State PreviousState = new State("Previous",
-            () => { }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}
-        );
 
 
         /* STAGE 2: create the transitions with their logic(s)
@@ -77,7 +58,7 @@ public class FSM_FishFlee : FiniteStateMachine
 
         AddTransition(sourceState, transition, destinationState);
 
-         */
+         */ 
 
 
         /* STAGE 4: set the initial state

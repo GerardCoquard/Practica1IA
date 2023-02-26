@@ -23,6 +23,7 @@ public class FSM_FishHungry : FiniteStateMachine
          * Usually this code includes .GetComponent<...> invocations */
         flockingAround = GetComponent<FlockingAround>();
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
+        blackboard_global.AddVoidHungry(this);
         base.OnEnter(); // do not remove
     }
 

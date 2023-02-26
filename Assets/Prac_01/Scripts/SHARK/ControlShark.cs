@@ -29,7 +29,7 @@ public class ControlShark : MonoBehaviour
             //dummy.transform.position = position;
 
             GameObject dummy = new GameObject("dummy");
-            dummy.tag = "DUMMY";
+            dummy.tag = "FOOD";
             dummy.transform.position = position;
 
             Destroy(dummy, 3.0f);
