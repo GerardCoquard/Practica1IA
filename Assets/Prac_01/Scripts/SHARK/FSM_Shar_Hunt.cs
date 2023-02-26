@@ -45,7 +45,8 @@ public class FSM_Shar_Hunt : FiniteStateMachine
          *-----------------------------------------------*/
 
         State WanderAroundHome = new State("WanderAroundHome",
-            () => { 
+            () => {
+                Debug.Log("SADAS");
                 wander.attractor = blackboard.attractor; 
                 wander.enabled = true; 
             }, // write on enter logic inside {}

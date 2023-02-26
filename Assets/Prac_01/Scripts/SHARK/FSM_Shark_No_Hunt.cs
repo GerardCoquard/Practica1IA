@@ -40,20 +40,9 @@ public class FSM_Shark_No_Hunt : FiniteStateMachine
         /* STAGE 1: create the states with their logic(s)
          *-----------------------------------------------*/
 
-        State WanderAroundHome = new State("Wander Home",
-            () => {
-                wander.attractor = blackboard.attractor;
-                wander.enabled = true;
-            }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
-            () => {
-                wander.enabled = false;
-                wander.attractor = null;
-            }  // write on exit logic inisde {}  
-        );
-
         State CheckingSound = new State("Checking Sound",
             () => {
+                Debug.Log(soundTarget);
                 arrive.target = soundTarget;
                 arrive.enabled = true;
             }, // write on enter logic inside {}
@@ -68,37 +57,16 @@ public class FSM_Shark_No_Hunt : FiniteStateMachine
         /* STAGE 2: create the transitions with their logic(s)
          * ---------------------------------------------------*/
 
-        Transition SoundHeard = new Transition("SoundHeard",
-            () => {
-                soundTarget = SensingUtils.FindInstanceWithinRadius(gameObject, "DUMMY", blackboard.soundDetectableRadius);
-                if (soundTarget != null)
-                    return true;
-                return false;
-            }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
-
-        Transition SoundDisappear = new Transition("SoundDisappear",
-            () => {
-                if (soundTarget.Equals(null))
-                    return true;
-                return false;
-            }, // write the condition checkeing code in {}
-            () => { }
-        );
 
         /* STAGE 3: add states and transitions to the FSM 
          * ----------------------------------------------*/
 
-        AddStates(WanderAroundHome, CheckingSound);
-
-        AddTransition(WanderAroundHome, SoundHeard, CheckingSound);
-        AddTransition(CheckingSound, SoundDisappear, WanderAroundHome);
+        AddStates(CheckingSound);
 
 
         /* STAGE 4: set the initial state*/
 
-        initialState = WanderAroundHome;
+        initialState = CheckingSound;
 
     }
 }

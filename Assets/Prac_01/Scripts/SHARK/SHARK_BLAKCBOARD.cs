@@ -22,6 +22,6 @@ public class SHARK_BLAKCBOARD : MonoBehaviour
 
     private void Update()
     {
-        Gizmos.DrawWireSphere(home.transform.position, soundDetectableRadius);
+        //Gizmos.DrawWireSphere(home.transform.position, soundDetectableRadius);
     }
 }
