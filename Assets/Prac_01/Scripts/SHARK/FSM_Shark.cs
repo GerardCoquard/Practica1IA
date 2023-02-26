@@ -10,7 +10,10 @@ public class FSM_Shark : FiniteStateMachine
      * For instance: steering behaviours, blackboard, ...*/
 
     private SHARK_BLAKCBOARD blackboard;
-    private GameObject soundTarget;
+    private Arrive arrive;
+    private WanderAround wander;
+    private float time;
+    GameObject soundTarget;
 
     public override void OnEnter()
     {
@@ -18,6 +21,7 @@ public class FSM_Shark : FiniteStateMachine
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
         blackboard = GetComponent<SHARK_BLAKCBOARD>();
+        arrive = GetComponent<Arrive>();
         base.OnEnter(); // do not remove
     }
 
@@ -46,8 +50,17 @@ public class FSM_Shark : FiniteStateMachine
         FiniteStateMachine HUNT = ScriptableObject.CreateInstance<FSM_Shar_Hunt>();
         HUNT.name = "HUNT";
 
-        FiniteStateMachine SOUND = ScriptableObject.CreateInstance<FSM_Shark_No_Hunt>();
-        SOUND.name = "SOUND";
+        State CheckingSound = new State("Checking Sound",
+            () => {
+                arrive.enabled = true;
+                arrive.target = soundTarget;
+            }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => {
+                arrive.enabled = false;
+                arrive.target = null;
+            }  // write on exit logic inisde {}  
+        );
 
         /* STAGE 2: create the transitions with their logic(s)
          * ---------------------------------------------------
@@ -60,6 +73,8 @@ public class FSM_Shark : FiniteStateMachine
         */
         Transition SoundHeard = new Transition("SoundHeard",
         () => {
+
+
         soundTarget = SensingUtils.FindInstanceWithinRadius(gameObject, "RED_TAG", blackboard.soundDetectableRadius);
         if (soundTarget != null)
             return true;
@@ -87,9 +102,9 @@ public class FSM_Shark : FiniteStateMachine
 
          */
 
-        AddStates(HUNT, SOUND);
-        AddTransition(HUNT, SoundHeard, SOUND);
-        AddTransition(SOUND, SoundDisappear, HUNT);
+        AddStates(HUNT, CheckingSound);
+        AddTransition(HUNT, SoundHeard, CheckingSound);
+        AddTransition(CheckingSound, SoundDisappear, HUNT);
 
 
 

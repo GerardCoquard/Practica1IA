@@ -26,6 +26,10 @@ public class Blackboard_Fish_Global : MonoBehaviour
     {
         voidsHungry.Add(fishHungry);
     }
+    public void RemoveVoidHungry(FSM_FishHungry fishHungry)
+    {
+        voidsHungry.Remove(fishHungry);
+    }
     public void StartHunger()
     {
         if(!hunger) StartCoroutine(Hunger());    

@@ -15,17 +15,28 @@ public class FSM_Shar_Hunt : FiniteStateMachine
     SHARK_BLAKCBOARD blackboard;
     GameObject theFish;
     float timeEating;
+    private float acceleration;
+    private float speed;
+
+    private void Awake()
+    {
+
+    }
 
     public override void OnEnter()
     {
         /* Write here the FSM initialization code. This code is execute every time the FSM is entered.
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
-        context = GetComponent<SteeringContext>();
+        
         wander = GetComponent<WanderAround>();
         arrive = GetComponent<Arrive>();
         seek = GetComponent<Seek>();
         blackboard = GetComponent<SHARK_BLAKCBOARD>();
+        context = GetComponent<SteeringContext>();
+        acceleration = context.maxAcceleration;
+        speed = context.maxSpeed;
+
         base.OnEnter(); // do not remove
     }
 
@@ -46,7 +57,8 @@ public class FSM_Shar_Hunt : FiniteStateMachine
 
         State WanderAroundHome = new State("WanderAroundHome",
             () => {
-                Debug.Log("SADAS");
+                context.maxAcceleration = acceleration;
+                context.maxSpeed = speed;
                 wander.attractor = blackboard.attractor; 
                 wander.enabled = true; 
             }, // write on enter logic inside {}
@@ -61,11 +73,11 @@ public class FSM_Shar_Hunt : FiniteStateMachine
                 seek.target = theFish;
                 seek.enabled = true;
             }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
+            () => { Debug.Log(context.maxSpeed); }, // write in state logic inside {}
             () => { 
                 seek.enabled = false;
-                context.maxAcceleration /= 2;
-                context.maxSpeed /= 2f;
+                context.maxAcceleration = acceleration;
+                context.maxSpeed = speed;
             }  // write on exit logic inisde {}  
         );
 
@@ -73,6 +85,9 @@ public class FSM_Shar_Hunt : FiniteStateMachine
             () => {
                 theFish.GetComponent<FSMExecutor>().enabled = false;
                 theFish.GetComponent<FlockingAround>().enabled = false;
+
+                theFish.GetComponent<Blackboard_Fish_Global>().RemoveVoidHungry(theFish.GetComponent<FSM_FishHungry>());
+
                 theFish.transform.parent = gameObject.transform;
                 arrive.target = blackboard.home;
                 arrive.enabled = true;
