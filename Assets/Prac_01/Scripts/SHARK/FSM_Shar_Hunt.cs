@@ -73,7 +73,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
                 seek.target = theFish;
                 seek.enabled = true;
             }, // write on enter logic inside {}
-            () => { Debug.Log(context.maxSpeed); }, // write in state logic inside {}
+            () => { }, // write in state logic inside {}
             () => { 
                 seek.enabled = false;
                 context.maxAcceleration = acceleration;
@@ -86,7 +86,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
                 theFish.GetComponent<FSMExecutor>().enabled = false;
                 theFish.GetComponent<FlockingAround>().enabled = false;
 
-                theFish.GetComponent<Blackboard_Fish_Global>().RemoveVoidHungry(theFish.GetComponent<FSM_FishHungry>());
+                ((FSM_Fish)theFish.GetComponent<FSMExecutor>().fsm).blackboard_global.voids.Remove((FSM_Fish)theFish.GetComponent<FSMExecutor>().fsm);
 
                 theFish.transform.parent = gameObject.transform;
                 arrive.target = blackboard.home;

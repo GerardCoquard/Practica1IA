@@ -9,12 +9,9 @@ public class FSM_FishHungry : FiniteStateMachine
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
     FlockingAround flockingAround;
-    Blackboard_Fish_Global blackboard_global;
+    public Blackboard_Fish_Global blackboard_global;
     float elpasedTime;
-    public GameObject food;
-    public bool eating;
-    public bool hungry;
-    public bool wandering;
+    FSM_Fish fsmFish;
 
     public override void OnEnter()
     {
@@ -23,7 +20,7 @@ public class FSM_FishHungry : FiniteStateMachine
          * Usually this code includes .GetComponent<...> invocations */
         flockingAround = GetComponent<FlockingAround>();
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
-        blackboard_global.AddVoidHungry(this);
+        fsmFish = (FSM_Fish)GetComponent<FSMExecutor>().fsm;
         base.OnEnter(); // do not remove
     }
 
@@ -49,9 +46,9 @@ public class FSM_FishHungry : FiniteStateMachine
 
          */
         State WanderingAround = new State("Wandering Around",
-            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; wandering = true; blackboard_global.SetAllWandering(); }, // write on enter logic inside {}
+            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); }, // write on enter logic inside {}
             () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; wandering = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
         );
 
 
@@ -63,14 +60,14 @@ public class FSM_FishHungry : FiniteStateMachine
 
 
         State Eating = new State("Eating",
-            () => { elpasedTime = 0; eating = true; }, // write on enter logic inside {}
+            () => { elpasedTime = 0; fsmFish.eating = true; }, // write on enter logic inside {}
             () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { eating = false; }  // write on exit logic inisde {}
+            () => { fsmFish.eating = false; }  // write on exit logic inisde {}
         );
         State WaitingForAllAte = new State("Waiting For All Ate",
             () => { }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { hungry = false; blackboard_global.StartHunger(); }  // write on exit logic inisde {}
+            () => { fsmFish.hungry = false; blackboard_global.StartHunger(); }  // write on exit logic inisde {}
         );
 
 
@@ -95,13 +92,14 @@ public class FSM_FishHungry : FiniteStateMachine
         );
 
         */
+        //Debug.Log(((FSM_Fish)GetComponent<FSMExecutor>().fsm).hungry);
         Transition WanderToReaching = new Transition("WanderToReaching",
-           () => { return hungry; }, // write the condition checkeing code in {}
+           () => {  return fsmFish.hungry;  }, // write the condition checkeing code in {}
            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
        );
 
         Transition ReachingToWander = new Transition("ReachingToWander",
-            () => { return wandering; }, // write the condition checkeing code in {}
+            () => { return fsmFish.wandering; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
@@ -113,10 +111,10 @@ public class FSM_FishHungry : FiniteStateMachine
         Transition EatToWait = new Transition("EatToWait",
             () => { return elpasedTime >= blackboard_global.eatTime; }, // write the condition checkeing code in {}
             () => {
-                if (food != null)
+                if (fsmFish.food != null)
                 {
-                    food.SetActive(false);
-                    food = null;
+                    fsmFish.food.SetActive(false);
+                    fsmFish.food = null;
                 }
             }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
@@ -128,16 +126,17 @@ public class FSM_FishHungry : FiniteStateMachine
 
         Transition ReachingToHome = new Transition("ReachingToHome",
             () => {
-                food = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "FOOD", blackboard_global.eatRadius);
-                if (food != null)
+
+                fsmFish.food = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "FOOD", blackboard_global.eatRadius);
+                if (fsmFish.food != null)
                 {
-                    if (food.transform.parent.tag != "BOID")
+                    if (fsmFish.food.transform.parent.tag != "BOID")
                     {
-                        food.transform.SetParent(transform);
+                        fsmFish.food.transform.SetParent(transform);
                         return true;
                     }
                 }
-                food = null;
+                fsmFish.food = null;
                 return false;
             }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed

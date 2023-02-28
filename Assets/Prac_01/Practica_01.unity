@@ -1011,7 +1011,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   homeAttractor: {fileID: 8844412}
   foodAttractor: {fileID: 265843453}
-  shark: {fileID: 333450156}
+  shark: {fileID: 2089036633}
   eatRadius: 1.5
   eatTime: 2
   homeCloseDistance: 8
@@ -1019,6 +1019,7 @@ MonoBehaviour:
   fleeTime: 0.5
   fleeDistanceTrigger: 6
   fleeSpeedMultiplier: 2
+  voids: []
   hungerCooldown: 8
 --- !u!4 &1932774142
 Transform:

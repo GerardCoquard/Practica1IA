@@ -8,7 +8,7 @@ public class FSM_Fish : FiniteStateMachine
     FlockingAround flockingAround;
     Flee flee;
     SteeringContext context;
-    Blackboard_Fish_Global blackboard_global;
+    public Blackboard_Fish_Global blackboard_global;
     float elpasedTime;
     public bool eating;
     public bool hungry;
@@ -23,6 +23,7 @@ public class FSM_Fish : FiniteStateMachine
         context = GetComponent<SteeringContext>();
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
         flee.target = blackboard_global.shark;
+        blackboard_global.AddVoid(this);
         base.OnEnter(); // do not remove
     }
 
@@ -65,7 +66,7 @@ public class FSM_Fish : FiniteStateMachine
         */
 
         Transition HungryToFlee = new Transition("HungryToFlee",
-            () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
+            () => { Debug.Log(SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger); return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 

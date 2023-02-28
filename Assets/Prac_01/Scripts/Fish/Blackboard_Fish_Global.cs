@@ -14,7 +14,7 @@ public class Blackboard_Fish_Global : MonoBehaviour
     public float fleeTime;
     public float fleeDistanceTrigger;
     public float fleeSpeedMultiplier;
-    List<FSM_FishHungry> voidsHungry = new List<FSM_FishHungry>();
+    public List<FSM_Fish> voids = new List<FSM_Fish>();
     public float hungerCooldown;
     float hungerTime;
     bool hunger;
@@ -22,13 +22,13 @@ public class Blackboard_Fish_Global : MonoBehaviour
     private void Start() {
         StartHunger();
     }
-    public void AddVoidHungry(FSM_FishHungry fishHungry)
+    public void AddVoid(FSM_Fish fishHungry)
     {
-        voidsHungry.Add(fishHungry);
+        voids.Add(fishHungry);
     }
-    public void RemoveVoidHungry(FSM_FishHungry fishHungry)
+    public void RemoveVoid(FSM_Fish fishHungry)
     {
-        voidsHungry.Remove(fishHungry);
+        voids.Remove(fishHungry);
     }
     public void StartHunger()
     {
@@ -43,7 +43,7 @@ public class Blackboard_Fish_Global : MonoBehaviour
             hungerTime += Time.deltaTime;
             yield return null;
         }
-        foreach (FSM_FishHungry fish in voidsHungry)
+        foreach (FSM_Fish fish in voids)
         {
             fish.hungry = true;
         }
@@ -51,7 +51,7 @@ public class Blackboard_Fish_Global : MonoBehaviour
     }
     public bool AllEated()
     {
-        foreach (FSM_FishHungry fish in voidsHungry)
+        foreach (FSM_Fish fish in voids)
         {
             if(fish.food!=null)
             {
@@ -62,7 +62,7 @@ public class Blackboard_Fish_Global : MonoBehaviour
     }
     public void SetAllWandering()
     {
-        foreach (FSM_FishHungry fish in voidsHungry)
+        foreach (FSM_Fish fish in voids)
         {
             if(!fish.wandering)
             {
