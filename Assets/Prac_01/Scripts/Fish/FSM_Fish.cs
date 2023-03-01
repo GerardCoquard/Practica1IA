@@ -14,7 +14,7 @@ public class FSM_Fish : FiniteStateMachine
     public bool hungry;
     public bool wandering;
     public GameObject food;
-    IState lastState;
+    public IState stateBefore;
 
     public override void OnEnter()
     {
@@ -48,11 +48,17 @@ public class FSM_Fish : FiniteStateMachine
         );
 
          */
-        FiniteStateMachine FLEE = ScriptableObject.CreateInstance<FSM_FishFlee>();
-        FLEE.name = "FLEE";
+        //FiniteStateMachine FLEE = ScriptableObject.CreateInstance<FSM_FishFlee>();
+        //FLEE.name = "FLEE";
 
         FiniteStateMachine HUNGRY = ScriptableObject.CreateInstance<FSM_FishHungry>();
         HUNGRY.name = "HUNGRY";
+
+        State Fleeing = new State("Fleeing",
+        () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
+        () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
+        () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
+        );
 
 
         /* STAGE 2: create the transitions with their logic(s)
@@ -124,11 +130,11 @@ public class FSM_Fish : FiniteStateMachine
 
          */
 
-        AddStates(HUNGRY,FLEE);
+        AddStates(HUNGRY, Fleeing);
 
 
-        AddTransition(HUNGRY,HungryToFlee,FLEE);
-        AddTransition(FLEE, FleeToHungry, HUNGRY);
+        AddTransition(HUNGRY,HungryToFlee, Fleeing);
+        AddTransition(Fleeing, FleeToHungry, HUNGRY);
 
         //AddTransition(ReachingFood,ReachingToFlee,Fleeing);
 

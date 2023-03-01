@@ -8,12 +8,17 @@ public class FSM_FishEat : FiniteStateMachine
     /* Declare here, as attributes, all the variables that need to be shared among
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
+    public Blackboard_Fish_Global blackboard_global;
+    float elpasedTime;
+    FSM_Fish fsmFish;
 
     public override void OnEnter()
     {
         /* Write here the FSM initialization code. This code is execute every time the FSM is entered.
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
+        blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
+        fsmFish = (FSM_Fish)GetComponent<FSMExecutor>().fsm;
         base.OnEnter(); // do not remove
     }
 
@@ -38,6 +43,16 @@ public class FSM_FishEat : FiniteStateMachine
         );
 
          */
+        State Eating = new State("Eating",
+    () => { elpasedTime = 0; fsmFish.eating = true; }, // write on enter logic inside {}
+    () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
+    () => { fsmFish.eating = false; }  // write on exit logic inisde {}
+);
+        State WaitingForAllAte = new State("Waiting For All Ate",
+            () => { }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { fsmFish.hungry = false; blackboard_global.StartHunger(); }  // write on exit logic inisde {}
+        );
 
 
         /* STAGE 2: create the transitions with their logic(s)
@@ -49,6 +64,16 @@ public class FSM_FishEat : FiniteStateMachine
         );
 
         */
+        Transition EatToWait = new Transition("EatToWait",
+    () => { return elpasedTime >= blackboard_global.eatTime; }, // write the condition checkeing code in {}
+    () => {
+        if (fsmFish.food != null)
+        {
+            fsmFish.food.SetActive(false);
+            fsmFish.food = null;
+        }
+    }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+);
 
 
         /* STAGE 3: add states and transitions to the FSM 
@@ -58,14 +83,17 @@ public class FSM_FishEat : FiniteStateMachine
 
         AddTransition(sourceState, transition, destinationState);
 
-         */ 
+         */
+        AddStates(Eating, WaitingForAllAte);
 
+        AddTransition(Eating, EatToWait, WaitingForAllAte);
 
         /* STAGE 4: set the initial state
          
         initialState = ... 
 
          */
+        initialState = Eating;
 
     }
 }

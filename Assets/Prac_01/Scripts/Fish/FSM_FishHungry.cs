@@ -46,11 +46,10 @@ public class FSM_FishHungry : FiniteStateMachine
 
          */
         State WanderingAround = new State("Wandering Around",
-            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); }, // write on enter logic inside {}
-            () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
+        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); if (fsmFish.stateBefore != null) fsmFish.stateBefore = ReachingHome; }, // write on enter logic inside {}
+        () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
+        () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
         );
-
 
         State ReachingFood = new State("Reaching Food",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.foodAttractor; }, // write on enter logic inside {}
@@ -172,7 +171,15 @@ public class FSM_FishHungry : FiniteStateMachine
         initialState = ... 
 
          */
-        initialState = WanderingAround;
+        if(previousState == null)
+        {
+            initialState = WanderingAround;
+        }
+        else
+        {
+            initialState = previousState;
+        }
+
 
     }
 }
