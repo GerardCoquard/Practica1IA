@@ -44,12 +44,12 @@ public class FSM_FishEat : FiniteStateMachine
 
          */
         State Eating = new State("Eating",
-    () => { elpasedTime = 0; fsmFish.eating = true; }, // write on enter logic inside {}
-    () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-    () => { fsmFish.eating = false; }  // write on exit logic inisde {}
-);
+        () => { elpasedTime = 0; fsmFish.eating = true; fsmFish.isReachingHome = false; }, // write on enter logic inside {}
+        () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
+        () => { fsmFish.eating = false; }  // write on exit logic inisde {}
+        );
         State WaitingForAllAte = new State("Waiting For All Ate",
-            () => { }, // write on enter logic inside {}
+            () => { fsmFish.isReachingHome = true; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { fsmFish.hungry = false; blackboard_global.StartHunger(); }  // write on exit logic inisde {}
         );
