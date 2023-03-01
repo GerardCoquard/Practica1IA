@@ -46,15 +46,15 @@ public class FSM_FishHungry : FiniteStateMachine
 
          */
         State WanderingAround = new State("Wandering Around",
-        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); if (fsmFish.stateBefore != null) fsmFish.stateBefore = ReachingHome; }, // write on enter logic inside {}
+        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); }, // write on enter logic inside {}
         () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
+        () => { flockingAround.enabled = false; fsmFish.wandering = false; fsmFish.stateBefore = 1; }  // write on exit logic inisde {}
         );
 
         State ReachingFood = new State("Reaching Food",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.foodAttractor; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; fsmFish.stateBefore = 2; }  // write on exit logic inisde {}
         );
 
 
@@ -71,14 +71,20 @@ public class FSM_FishHungry : FiniteStateMachine
 
 
         State GoingHome = new State("Going Home",
-            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; }, // write on enter logic inside {}
+            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor;}, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; fsmFish.stateBefore = 3; }  // write on exit logic inisde {}
         );
         State ReachingHome = new State("Reaching Home",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; }, // write on enter logic inside {}
             () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; fsmFish.stateBefore = 4; }  // write on exit logic inisde {}
+        );
+
+        State EnterController = new State("EnterController",
+        () => { Debug.Log(fsmFish.stateBefore); }, // write on enter logic inside {}
+        () => {  }, // write in state logic inside {}
+        () => { }  // write on exit logic inisde {}
         );
 
 
@@ -146,6 +152,23 @@ public class FSM_FishHungry : FiniteStateMachine
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
+        Transition EnterToReachF = new Transition("EnterToReachF",
+        () => { return fsmFish.stateBefore == 2; }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+
+        Transition EnterToWander = new Transition("EnterToWander",
+        () => { return fsmFish.stateBefore == 1; }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+        Transition EnterToGoing = new Transition("EnterToGoing",
+        () => { return fsmFish.stateBefore == 3; }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+        Transition EnterToReachH = new Transition("EnterToReachH",
+        () => { return fsmFish.stateBefore == 4; }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
 
         /* STAGE 3: add states and transitions to the FSM 
          * ----------------------------------------------
@@ -155,7 +178,7 @@ public class FSM_FishHungry : FiniteStateMachine
         AddTransition(sourceState, transition, destinationState);
 
          */
-        AddStates(WanderingAround,ReachingFood,ReachingHome,Eating, WaitingForAllAte, GoingHome);
+        AddStates(WanderingAround,ReachingFood,ReachingHome,Eating, WaitingForAllAte, GoingHome,EnterController);
 
         AddTransition(WanderingAround, WanderToReaching, ReachingFood);
         AddTransition(ReachingFood, ReachingToHome, GoingHome);
@@ -165,20 +188,18 @@ public class FSM_FishHungry : FiniteStateMachine
         AddTransition(Eating, EatToWait, WaitingForAllAte);
         AddTransition(WaitingForAllAte, WaitToWander, WanderingAround);
 
+        AddTransition(EnterController, EnterToWander, WanderingAround);
+        AddTransition(EnterController, EnterToReachF, ReachingFood);
+        AddTransition(EnterController, EnterToGoing, GoingHome);
+        AddTransition(EnterController, EnterToReachH, ReachingHome);
+
 
         /* STAGE 4: set the initial state
          
         initialState = ... 
 
          */
-        if(previousState == null)
-        {
-            initialState = WanderingAround;
-        }
-        else
-        {
-            initialState = previousState;
-        }
+        initialState = EnterController;
 
 
     }

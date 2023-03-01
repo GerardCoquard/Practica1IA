@@ -14,7 +14,7 @@ public class FSM_Fish : FiniteStateMachine
     public bool hungry;
     public bool wandering;
     public GameObject food;
-    public IState stateBefore;
+    public int stateBefore;
 
     public override void OnEnter()
     {
@@ -24,6 +24,7 @@ public class FSM_Fish : FiniteStateMachine
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
         flee.target = blackboard_global.shark;
         blackboard_global.AddVoid(this);
+        stateBefore = 1;
         base.OnEnter(); // do not remove
     }
 
@@ -57,7 +58,7 @@ public class FSM_Fish : FiniteStateMachine
         State Fleeing = new State("Fleeing",
         () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
         () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
+        () => { flee.enabled = false; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
         );
 
 
