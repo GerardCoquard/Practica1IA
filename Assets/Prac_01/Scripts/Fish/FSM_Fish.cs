@@ -9,10 +9,12 @@ public class FSM_Fish : FiniteStateMachine
     Flee flee;
     SteeringContext context;
     public Blackboard_Fish_Global blackboard_global;
-    float elpasedTime;
+    public float elpasedTime;
     public bool eating;
     public bool hungry;
     public bool wandering;
+    public bool reaching = false;
+    public bool waiting = false;
     public GameObject food;
     public IState stateBefore;
 
@@ -53,11 +55,13 @@ public class FSM_Fish : FiniteStateMachine
 
         FiniteStateMachine HUNGRY = ScriptableObject.CreateInstance<FSM_FishHungry>();
         HUNGRY.name = "HUNGRY";
+        FiniteStateMachine EAT = ScriptableObject.CreateInstance<FSM_FishEat>();
+        EAT.name = "EAT";
 
         State Fleeing = new State("Fleeing",
         () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
         () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flee.enabled = false; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
+        () => { flee.enabled = false; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; elpasedTime = 0; }  // write on exit logic inisde {}
         );
 
 
@@ -72,7 +76,16 @@ public class FSM_Fish : FiniteStateMachine
         */
 
         Transition HungryToFlee = new Transition("HungryToFlee",
-            () => { Debug.Log(SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger); return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
+            () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
+            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+        Transition ReachToEat = new Transition("ReachToEat",
+        () => { return reaching && elpasedTime >= blackboard_global.timeToStopReachHome; }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+
+        Transition WaitToWander = new Transition("WaitToWander",
+            () => { return waiting && blackboard_global.AllEated(); }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
@@ -130,10 +143,14 @@ public class FSM_Fish : FiniteStateMachine
 
          */
 
-        AddStates(HUNGRY, Fleeing);
+        AddStates(HUNGRY, Fleeing,EAT);
 
 
         AddTransition(HUNGRY,HungryToFlee, Fleeing);
+
+        AddTransition(HUNGRY, ReachToEat, EAT);
+        AddTransition(EAT, WaitToWander, HUNGRY);
+
         AddTransition(Fleeing, FleeToHungry, HUNGRY);
 
         //AddTransition(ReachingFood,ReachingToFlee,Fleeing);

@@ -21,7 +21,7 @@ public class Blackboard_Fish_Global : MonoBehaviour
     public int stateBefore = 1;
 
     private void Start() {
-        StartHunger();
+        //StartHunger();
     }
     public void AddVoid(FSM_Fish fishHungry)
     {
