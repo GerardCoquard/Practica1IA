@@ -57,7 +57,7 @@ public class FSM_Fish : FiniteStateMachine
         State Fleeing = new State("Fleeing",
         () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
         () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
+        () => { flee.enabled = false; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
         );
 
 

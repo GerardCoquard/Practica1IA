@@ -46,15 +46,15 @@ public class FSM_FishHungry : FiniteStateMachine
 
          */
         State WanderingAround = new State("Wandering Around",
-        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); if (fsmFish.stateBefore != null) fsmFish.stateBefore = ReachingHome; }, // write on enter logic inside {}
+        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); }, // write on enter logic inside {}
         () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
+        () => { flockingAround.enabled = false; fsmFish.wandering = false; blackboard_global.stateBefore = 1; }  // write on exit logic inisde {}
         );
 
         State ReachingFood = new State("Reaching Food",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.foodAttractor; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; blackboard_global.stateBefore = 2; }  // write on exit logic inisde {}
         );
 
 
@@ -73,12 +73,12 @@ public class FSM_FishHungry : FiniteStateMachine
         State GoingHome = new State("Going Home",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; blackboard_global.stateBefore = 3; }  // write on exit logic inisde {}
         );
         State ReachingHome = new State("Reaching Home",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; }, // write on enter logic inside {}
             () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; blackboard_global.stateBefore = 4; }  // write on exit logic inisde {}
         );
 
 
@@ -171,15 +171,25 @@ public class FSM_FishHungry : FiniteStateMachine
         initialState = ... 
 
          */
-        if(previousState == null)
+        if(blackboard_global == null)
         {
-            initialState = WanderingAround;
+            blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
         }
-        else
+        switch (blackboard_global.stateBefore)
         {
-            initialState = previousState;
+            case 1:
+                initialState = WanderingAround;
+                break;
+            case 2:
+                initialState = ReachingFood;
+                break;
+            case 3:
+                initialState = GoingHome;
+                break;
+            case 4:
+                initialState = ReachingHome;
+                break;
         }
-
-
+        
     }
 }

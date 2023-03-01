@@ -18,6 +18,7 @@ public class Blackboard_Fish_Global : MonoBehaviour
     public float hungerCooldown;
     float hungerTime;
     bool hunger;
+    public int stateBefore = 1;
 
     private void Start() {
         StartHunger();
