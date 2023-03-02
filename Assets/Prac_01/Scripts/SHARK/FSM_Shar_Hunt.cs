@@ -34,8 +34,6 @@ public class FSM_Shar_Hunt : FiniteStateMachine
         seek = GetComponent<Seek>();
         blackboard = GetComponent<SHARK_BLAKCBOARD>();
         context = GetComponent<SteeringContext>();
-        acceleration = context.maxAcceleration;
-        speed = context.maxSpeed;
 
         base.OnEnter(); // do not remove
     }
@@ -57,8 +55,8 @@ public class FSM_Shar_Hunt : FiniteStateMachine
 
         State WanderAroundHome = new State("WanderAroundHome",
             () => {
-                context.maxAcceleration = acceleration;
-                context.maxSpeed = speed;
+                context.maxAcceleration = blackboard.maxNormalAcceleration;
+                context.maxSpeed = blackboard.maxNormalSpeed;
                 wander.attractor = blackboard.attractor; 
                 wander.enabled = true; 
             }, // write on enter logic inside {}
@@ -68,8 +66,8 @@ public class FSM_Shar_Hunt : FiniteStateMachine
 
         State GoHuntFish = new State("GoHuntFish",
             () => {
-                context.maxAcceleration *= 2;
-                context.maxSpeed *= 2f;
+                context.maxAcceleration *= 1.5f;
+                context.maxSpeed *= 1.5f;
                 seek.target = theFish;
                 seek.enabled = true;
             }, // write on enter logic inside {}
@@ -92,7 +90,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
                 arrive.target = blackboard.home;
                 arrive.enabled = true;
             }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
+            () => { Debug.Log("asdsa"); }, // write in state logic inside {}
             () => { arrive.enabled = false; }  // write on exit logic inisde {}  
         );
 

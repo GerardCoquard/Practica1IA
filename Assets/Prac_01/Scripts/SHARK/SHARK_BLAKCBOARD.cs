@@ -10,6 +10,8 @@ public class SHARK_BLAKCBOARD : MonoBehaviour
     public float timeToEat = 3.0f;
     public float soundDetectableRadius = 300;
     public float soundReachedRadius = 20;
+    public float maxNormalAcceleration = 40;
+    public float maxNormalSpeed= 10;
 
     public GameObject attractor;     // hen wanders around this point
     public GameObject home;
