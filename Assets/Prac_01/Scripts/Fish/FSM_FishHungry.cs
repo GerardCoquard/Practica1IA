@@ -116,10 +116,11 @@ public class FSM_FishHungry : FiniteStateMachine
                     }
                 }
                 fsmFish.food = null;
-                if(transform.GetChild(0) != null)
-                {
-                    transform.GetChild(0).gameObject.SetActive(false);
-                }
+
+                //if(GetComponent<FSMExecutor>().transform.GetChild(0) != null)
+                //{
+                //    GetComponent<FSMExecutor>().transform.GetChild(0).gameObject.SetActive(false);
+                //}
                 return false;
             }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed

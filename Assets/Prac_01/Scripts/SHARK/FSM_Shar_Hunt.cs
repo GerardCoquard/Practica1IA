@@ -15,8 +15,6 @@ public class FSM_Shar_Hunt : FiniteStateMachine
     SHARK_BLAKCBOARD blackboard;
     GameObject theFish;
     float timeEating;
-    private float acceleration;
-    private float speed;
 
     private void Awake()
     {
@@ -74,8 +72,8 @@ public class FSM_Shar_Hunt : FiniteStateMachine
             () => { }, // write in state logic inside {}
             () => { 
                 seek.enabled = false;
-                context.maxAcceleration = acceleration;
-                context.maxSpeed = speed;
+                context.maxAcceleration /= 1.5f;
+                context.maxSpeed /= 1.5f;
             }  // write on exit logic inisde {}  
         );
 
@@ -111,7 +109,11 @@ public class FSM_Shar_Hunt : FiniteStateMachine
         Transition FishDetected = new Transition("FishDetected",
             () => {
                 theFish = SensingUtils.FindInstanceWithinRadius(gameObject, "BOID", blackboard.fishDetectableRadius);
-                return SensingUtils.DistanceToTarget(gameObject, theFish) < blackboard.fishDetectableRadius;
+                if (theFish != null)
+                {
+                    return SensingUtils.DistanceToTarget(gameObject, theFish) < blackboard.fishDetectableRadius;
+                }
+                return false;
             }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
