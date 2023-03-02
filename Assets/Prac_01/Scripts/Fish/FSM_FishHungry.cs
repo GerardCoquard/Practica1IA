@@ -12,6 +12,7 @@ public class FSM_FishHungry : FiniteStateMachine
     public Blackboard_Fish_Global blackboard_global;
     float elpasedTime;
     FSM_Fish fsmFish;
+    IState lastState;
 
     public override void OnEnter()
     {
@@ -22,7 +23,12 @@ public class FSM_FishHungry : FiniteStateMachine
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
         fsmFish = (FSM_Fish)GetComponent<FSMExecutor>().fsm;
         fsmFish.reaching = false;
-        fsmFish.elpasedTime = 0;
+        if(lastState != null && blackboard_global.fleeController)
+        {
+            initialState = lastState;
+            blackboard_global.fleeController = false;
+        }
+
         base.OnEnter(); // do not remove
     }
 
@@ -49,27 +55,27 @@ public class FSM_FishHungry : FiniteStateMachine
 
          */
         State WanderingAround = new State("Wandering Around",
-        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); fsmFish.waiting = false; blackboard_global.StartHunger(); }, // write on enter logic inside {}
-        () => { Debug.Log("1"); elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flockingAround.enabled = false; fsmFish.wandering = false; blackboard_global.stateBefore = 1; }  // write on exit logic inisde {}
+        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); fsmFish.waiting = false; blackboard_global.StartHunger(); if (fsmFish.food != false) fsmFish.food.SetActive(false); }, // write on enter logic inside {}
+        () => { elpasedTime += Time.deltaTime; Debug.Log("1"); }, // write in state logic inside {}
+        () => { flockingAround.enabled = false; fsmFish.wandering = false; lastState = currentState;  }  // write on exit logic inisde {}
         );
 
         State ReachingFood = new State("Reaching Food",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.foodAttractor; }, // write on enter logic inside {}
             () => { Debug.Log("2"); }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; blackboard_global.stateBefore = 2; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; lastState = currentState; }  // write on exit logic inisde {}
         );
 
 
         State GoingHome = new State("Going Home",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; }, // write on enter logic inside {}
             () => { Debug.Log("3"); }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; blackboard_global.stateBefore = 3; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; lastState = currentState; }  // write on exit logic inisde {}
         );
         State ReachingHome = new State("Reaching Home",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.reaching = true; }, // write on enter logic inside {}
-            () => { Debug.Log("4"); fsmFish.elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; blackboard_global.stateBefore = 4; }  // write on exit logic inisde {}
+            () => { fsmFish.elpasedTime += Time.deltaTime; Debug.Log("4"); }, // write in state logic inside {}
+            () => { flockingAround.enabled = false; lastState = currentState; }  // write on exit logic inisde {}
         );
 
 
@@ -153,25 +159,8 @@ public class FSM_FishHungry : FiniteStateMachine
         initialState = ... 
 
          */
-        if(blackboard_global == null)
-        {
-            blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
-        }
-        switch (blackboard_global.stateBefore)
-        {
-            case 1:
-                initialState = WanderingAround;
-                break;
-            case 2:
-                initialState = ReachingFood;
-                break;
-            case 3:
-                initialState = GoingHome;
-                break;
-            case 4:
-                initialState = ReachingHome;
-                break;
-        }
+
+        initialState = WanderingAround;
         
     }
 }

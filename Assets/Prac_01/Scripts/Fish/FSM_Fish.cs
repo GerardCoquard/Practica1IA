@@ -59,7 +59,7 @@ public class FSM_Fish : FiniteStateMachine
         EAT.name = "EAT";
 
         State Fleeing = new State("Fleeing",
-        () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
+        () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; blackboard_global.fleeController = true; }, // write on enter logic inside {}
         () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
         () => { flee.enabled = false; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; elpasedTime = 0; }  // write on exit logic inisde {}
         );

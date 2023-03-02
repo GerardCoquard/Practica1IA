@@ -88,7 +88,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
                 arrive.target = blackboard.home;
                 arrive.enabled = true;
             }, // write on enter logic inside {}
-            () => { Debug.Log("asdsa"); }, // write in state logic inside {}
+            () => { }, // write in state logic inside {}
             () => { arrive.enabled = false; }  // write on exit logic inisde {}  
         );
 
