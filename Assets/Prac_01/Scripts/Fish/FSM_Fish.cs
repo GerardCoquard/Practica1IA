@@ -79,11 +79,10 @@ public class FSM_Fish : FiniteStateMachine
             () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-        Transition ReachToEat = new Transition("ReachToEat",
-        () => { return reaching && elpasedTime >= blackboard_global.timeToStopReachHome; }, // write the condition checkeing code in {}
-        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        Transition HomeToReach = new Transition("HomeToReach",
+            () => { return reaching && SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance; }, // write the condition checkeing code in {}
+            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
         Transition WaitToWander = new Transition("WaitToWander",
             () => { return waiting && blackboard_global.AllEated(); }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
@@ -148,7 +147,7 @@ public class FSM_Fish : FiniteStateMachine
 
         AddTransition(HUNGRY,HungryToFlee, Fleeing);
 
-        AddTransition(HUNGRY, ReachToEat, EAT);
+        AddTransition(HUNGRY, HomeToReach, EAT);
         AddTransition(EAT, WaitToWander, HUNGRY);
 
         AddTransition(Fleeing, FleeToHungry, HUNGRY);
