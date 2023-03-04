@@ -82,7 +82,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
                 theFish.GetComponent<FSMExecutor>().enabled = false;
                 theFish.GetComponent<FlockingAround>().enabled = false;
 
-                ((FSM_Fish)theFish.GetComponent<FSMExecutor>().fsm).blackboard_global.voids.Remove((FSM_Fish)theFish.GetComponent<FSMExecutor>().fsm);
+                ((FSM_FishFather)theFish.GetComponent<FSMExecutor>().fsm).blackboard_global.voids.Remove((FSM_FishFather)theFish.GetComponent<FSMExecutor>().fsm);
 
                 theFish.transform.parent = gameObject.transform;
                 arrive.target = blackboard.home;

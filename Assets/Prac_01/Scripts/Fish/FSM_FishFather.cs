@@ -9,6 +9,12 @@ public class FSM_FishFather : FiniteStateMachine
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
     public Blackboard_Fish_Global blackboard_global;
+    public GameObject food;
+    public bool eating;
+    public bool hungry;
+    public bool wandering;
+    public bool waiting = false;
+    public bool reaching = false;
 
     public override void OnEnter()
     {
@@ -16,6 +22,7 @@ public class FSM_FishFather : FiniteStateMachine
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
+        blackboard_global.AddVoid(this);
         base.OnEnter(); // do not remove
     }
 
@@ -57,9 +64,9 @@ public class FSM_FishFather : FiniteStateMachine
 
         */
         Transition HomeToEat = new Transition("HomeToReach",
-        () => { if(SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance && blackboard_global.reaching)
+        () => { if(SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance && reaching)
             {
-                blackboard_global.reaching = false;
+                reaching = false;
                 return true;
             }
             return false;
@@ -70,9 +77,9 @@ public class FSM_FishFather : FiniteStateMachine
 
         Transition WaitToWander = new Transition("WaitToWander",
         () => {
-            if (blackboard_global.AllEated() && blackboard_global.waiting)
+            if (blackboard_global.AllEated() && waiting)
             {
-                blackboard_global.waiting = false;
+                waiting = false;
                 return true;
             }
             return false;

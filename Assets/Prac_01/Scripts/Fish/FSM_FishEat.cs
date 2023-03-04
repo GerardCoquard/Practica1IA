@@ -10,7 +10,7 @@ public class FSM_FishEat : FiniteStateMachine
      * For instance: steering behaviours, blackboard, ...*/
     public Blackboard_Fish_Global blackboard_global;
     float elpasedTime;
-    FSM_Fish fsmFish;
+    FSM_FishFather fsmFish;
 
     public override void OnEnter()
     {
@@ -18,7 +18,7 @@ public class FSM_FishEat : FiniteStateMachine
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
-        fsmFish = (FSM_Fish)GetComponent<FSMExecutor>().fsm;
+        fsmFish = (FSM_FishFather)GetComponent<FSMExecutor>().fsm;
         base.OnEnter(); // do not remove
     }
 
@@ -50,7 +50,7 @@ public class FSM_FishEat : FiniteStateMachine
         () => { fsmFish.eating = false; }  // write on exit logic inisde {}
         );
         State WaitingForAllAte = new State("Waiting For All Ate",
-            () => { blackboard_global.waiting = true; }, // write on enter logic inside {}
+            () => { fsmFish.waiting = true; }, // write on enter logic inside {}
             () => { }, // write in state logic inside {}
             () => { fsmFish.hungry = false; }  // write on exit logic inisde {}
         );

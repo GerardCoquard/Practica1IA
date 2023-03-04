@@ -1014,7 +1014,7 @@ MonoBehaviour:
   shark: {fileID: 2089036633}
   eatRadius: 1.5
   eatTime: 2
-  homeCloseDistance: 10
+  homeCloseDistance: 8
   timeToStopReachHome: 1
   fleeTime: 0.5
   fleeDistanceTrigger: 6
