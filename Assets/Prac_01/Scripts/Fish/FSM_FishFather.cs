@@ -2,27 +2,20 @@ using FSMs;
 using UnityEngine;
 using Steerings;
 
-[CreateAssetMenu(fileName = "FSM_FishFlee", menuName = "Finite State Machines/FSM_FishFlee", order = 1)]
-public class FSM_FishFlee : FiniteStateMachine
+[CreateAssetMenu(fileName = "FSM_FishFather", menuName = "Finite State Machines/FSM_FishFather", order = 1)]
+public class FSM_FishFather : FiniteStateMachine
 {
     /* Declare here, as attributes, all the variables that need to be shared among
      * states and transitions and/or set in OnEnter or used in OnExit 
      * For instance: steering behaviours, blackboard, ...*/
-    Flee flee;
-    SteeringContext context;
-    Blackboard_Fish_Global blackboard_global;
-    float elpasedTime;
-    IState lastState;
+    public Blackboard_Fish_Global blackboard_global;
 
     public override void OnEnter()
     {
         /* Write here the FSM initialization code. This code is execute every time the FSM is entered.
          * It's equivalent to the on enter action of any state 
          * Usually this code includes .GetComponent<...> invocations */
-        flee = GetComponent<Flee>();
-        context = GetComponent<SteeringContext>();
         blackboard_global = FindObjectOfType<Blackboard_Fish_Global>();
-        flee.target = blackboard_global.shark;
         base.OnEnter(); // do not remove
     }
 
@@ -32,6 +25,7 @@ public class FSM_FishFlee : FiniteStateMachine
          * It's equivalent to the on exit action of any state 
          * Usually this code turns off behaviours that shouldn't be on when one the FSM has
          * been exited. */
+        DisableAllSteerings();
         base.OnExit();
     }
 
@@ -47,16 +41,10 @@ public class FSM_FishFlee : FiniteStateMachine
         );
 
          */
-        State Fleeing = new State("Fleeing",
-            () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
-            () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
-        );
-        //State PreviousState = new State("Previous",
-        //    () => { }, // write on enter logic inside {}
-        //    () => { }, // write in state logic inside {}
-        //    () => { }  // write on exit logic inisde {}
-        //);
+        FiniteStateMachine EAT = ScriptableObject.CreateInstance<FSM_FishEat>();
+        EAT.name = "EAT";
+        FiniteStateMachine FISH = ScriptableObject.CreateInstance<FSM_Fish>();
+        FISH.name = "FISH";
 
 
         /* STAGE 2: create the transitions with their logic(s)
@@ -68,6 +56,29 @@ public class FSM_FishFlee : FiniteStateMachine
         );
 
         */
+        Transition HomeToEat = new Transition("HomeToReach",
+        () => { if(SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance && blackboard_global.reaching)
+            {
+                blackboard_global.reaching = false;
+                return true;
+            }
+            return false;
+             }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
+
+
+        Transition WaitToWander = new Transition("WaitToWander",
+        () => {
+            if (blackboard_global.AllEated() && blackboard_global.waiting)
+            {
+                blackboard_global.waiting = false;
+                return true;
+            }
+            return false;
+        }, // write the condition checkeing code in {}
+        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        );
 
 
         /* STAGE 3: add states and transitions to the FSM 
@@ -78,6 +89,10 @@ public class FSM_FishFlee : FiniteStateMachine
         AddTransition(sourceState, transition, destinationState);
 
          */
+        AddStates(EAT,FISH);
+        AddTransition(FISH, HomeToEat, EAT);
+        AddTransition(EAT, WaitToWander, FISH);
+
 
 
         /* STAGE 4: set the initial state
@@ -85,7 +100,7 @@ public class FSM_FishFlee : FiniteStateMachine
         initialState = ... 
 
          */
-        initialState = Fleeing;
+        initialState = FISH;
 
     }
 }

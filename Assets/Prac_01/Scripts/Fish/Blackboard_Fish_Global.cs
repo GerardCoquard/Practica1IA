@@ -20,6 +20,8 @@ public class Blackboard_Fish_Global : MonoBehaviour
     bool hunger;
     public int stateBefore = 1;
     public bool fleeController = false;
+    public bool waiting = false;
+    public bool reaching = false;
 
     private void Start() {
         //StartHunger();
