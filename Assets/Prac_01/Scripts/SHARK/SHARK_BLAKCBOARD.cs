@@ -6,6 +6,7 @@ public class SHARK_BLAKCBOARD : MonoBehaviour
 {
     public float fishDetectableRadius = 5; // within this radius worms are detected
     public float fishReachedRadius = 1;    // at this distace worm is eatable
+    public float boatDetectedRadius = 500;
     public float homeReachedRadius = 5;
     public float timeToEat = 3.0f;
     public float soundDetectableRadius = 300;

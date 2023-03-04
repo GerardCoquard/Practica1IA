@@ -40,6 +40,12 @@ public class ControlShark : MonoBehaviour
             var position = cam.ScreenToWorldPoint(Input.mousePosition);
             position.z = 0;
 
+            GameObject boat = new GameObject("boat");
+            boat.tag = "ATTACKER";
+            boat.transform.position = position;
+
+            Destroy(boat, 3.0f);
+
             //GameObject theDummy = SensingUtils.FindInstanceWithinRadius(gameObject, "DUMMY", 500);
             //if (theDummy != null)
             //    Destroy(theDummy);
@@ -49,9 +55,10 @@ public class ControlShark : MonoBehaviour
         {
             var position = cam.ScreenToWorldPoint(Input.mousePosition);
             position.z = 0;
-            GameObject chick = GameObject.Instantiate(chickPrefab);
-            chick.transform.position = position;
-            chick.transform.Rotate(0, 0, Random.value * 360);
+
+            //GameObject chick = GameObject.Instantiate(chickPrefab);
+            //chick.transform.position = position;
+            //chick.transform.Rotate(0, 0, Random.value * 360);
         }
     }
 }
