@@ -67,9 +67,9 @@ public class Blackboard_Fish_Global : MonoBehaviour
     {
         foreach (FSM_FishFather fish in voids)
         {
-            if(!fish.wandering)
+            if(!fish.flocking)
             {
-                fish.wandering = true;
+                fish.flocking = true;
                 fish.hungry = false;
             }
         }
