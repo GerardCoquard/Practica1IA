@@ -34,7 +34,8 @@ public class Blackboard_Fish_Global : MonoBehaviour
     }
     public void StartHunger()
     {
-        if(!hunger) StartCoroutine(Hunger());    
+        StopAllCoroutines();
+        StartCoroutine(Hunger());    
     }
     IEnumerator Hunger()
     {

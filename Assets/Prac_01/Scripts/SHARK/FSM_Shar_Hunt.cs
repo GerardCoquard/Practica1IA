@@ -120,7 +120,7 @@ public class FSM_Shar_Hunt : FiniteStateMachine
 
         Transition FishReached = new Transition("FishReached",
             () => { return SensingUtils.DistanceToTarget(gameObject, theFish) < blackboard.fishReachedRadius; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+            () => { theFish.GetComponent<FSMExecutor>().fsm.OnExit();theFish.GetComponent<FSMExecutor>().enabled = false;}  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
         Transition FishEated = new Transition("FishEated",

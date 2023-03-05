@@ -7,14 +7,17 @@ public class FSM_Fish : FiniteStateMachine
 {
     FlockingAround flockingAround;
     Flee flee;
+    Arrive arrive;
     SteeringContext context;
     public Blackboard_Fish_Global blackboard_global;
     float elpasedTime;
     FSM_FishFather fsmFish;
     IState lastState;
+    GameObject surrogateTarget;
 
     public override void OnEnter()
     {
+        arrive = GetComponent<Arrive>();
         flockingAround = GetComponent<FlockingAround>();
         flee = GetComponent<Flee>();
         context = GetComponent<SteeringContext>();
@@ -44,8 +47,11 @@ public class FSM_Fish : FiniteStateMachine
             () => { }, // write in state logic inside {}
             () => { }  // write on exit logic inisde {}
         );
+        
 
          */
+        surrogateTarget = transform.GetChild(0).gameObject;
+        surrogateTarget.transform.SetParent(null);
 
         State WanderingAround = new State("Wandering Around",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); blackboard_global.StartHunger(); }, // write on enter logic inside {}
@@ -76,9 +82,17 @@ public class FSM_Fish : FiniteStateMachine
             () => { }  // write on exit logic inisde {}
         );
         State ReachingHome = new State("Reaching Home",
-        () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.reaching = true; }, // write on enter logic inside {}
-        () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-        () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
+        () => {
+                arrive.enabled = true;
+                fsmFish.homeReached = false;
+                int angle = Random.Range(0,361);
+                float distance = Random.Range(0f,blackboard_global.homeCloseDistance);
+                surrogateTarget.transform.position = (Utils.OrientationToVector(angle).normalized * distance) + blackboard_global.homeAttractor.transform.position;
+                arrive.target = surrogateTarget;
+                fsmFish.reaching = true;
+            }, // write on enter logic inside {}
+        () => { }, // write in state logic inside {}
+        () => { fsmFish.reaching = false; arrive.enabled = false; }  // write on exit logic inisde {}
         );
 
 
@@ -129,8 +143,8 @@ public class FSM_Fish : FiniteStateMachine
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition ReachToEat = new Transition("ReachToEat",
-            () => { return elpasedTime >= blackboard_global.timeToStopReachHome; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+            () => { return SensingUtils.DistanceToTarget(gameObject,surrogateTarget) <= 1f; }, // write the condition checkeing code in {}
+            () => { fsmFish.homeReached = true; }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition ReachToFlee = new Transition("ReachToFlee",
             () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
@@ -202,6 +216,7 @@ public class FSM_Fish : FiniteStateMachine
         AddTransition(ReachingFood, ReachingToFlee, Fleeing);
         AddTransition(GoingHome, HomeToFlee, Fleeing);
         AddTransition(GoingHome, HomeToReach, ReachingHome);
+        AddTransition(ReachingHome,ReachToEat,WanderingAround);
         AddTransition(Fleeing, FleeToPrevious, PreviousState);
         AddTransition(PreviousState, PreviousToWander, WanderingAround);
         AddTransition(PreviousState, PreviousToReach, ReachingFood);

@@ -13,8 +13,9 @@ public class FSM_FishFather : FiniteStateMachine
     public bool eating;
     public bool hungry;
     public bool wandering;
-    public bool waiting = false;
-    public bool reaching = false;
+    public bool waiting;
+    public bool homeReached;
+    public bool reaching;
 
     public override void OnEnter()
     {
@@ -63,15 +64,10 @@ public class FSM_FishFather : FiniteStateMachine
         );
 
         */
-        Transition HomeToEat = new Transition("HomeToReach",
-        () => { if(SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance && reaching)
-            {
-                reaching = false;
-                return true;
-            }
-            return false;
-             }, // write the condition checkeing code in {}
-        () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
+        Transition ReachToEat = new Transition("ReachToEat",
+        () => { return homeReached; },
+         // write the condition checkeing code in {}
+        () => { homeReached = false; }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
 
@@ -97,7 +93,7 @@ public class FSM_FishFather : FiniteStateMachine
 
          */
         AddStates(EAT,FISH);
-        AddTransition(FISH, HomeToEat, EAT);
+        AddTransition(FISH, ReachToEat, EAT);
         AddTransition(EAT, WaitToWander, FISH);
 
 
