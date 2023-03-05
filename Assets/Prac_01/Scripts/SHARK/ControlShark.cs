@@ -7,7 +7,10 @@ public class ControlShark : MonoBehaviour
     private Camera cam;
     private GameObject wormPrefab;
     private GameObject chickPrefab;
-    //private GameObject dummy;
+    private GameObject dummy;
+    public GameObject boatPrefab;
+    private GameObject boat;
+    private float boatTimeToDisappear = 3.0f;
 
     // Start is called before the first frame update
     void Start()
@@ -17,6 +20,13 @@ public class ControlShark : MonoBehaviour
         cam = Camera.main;
         wormPrefab = Resources.Load<GameObject>("WORM");
         chickPrefab = Resources.Load<GameObject>("CHICK");
+
+        dummy = new GameObject("dummy");
+        dummy.tag = "RED_TAG";
+        dummy.SetActive(false);
+
+        boat = Instantiate(boatPrefab);
+        boat.SetActive(false);
     }
 
     // Update is called once per frame
@@ -26,13 +36,9 @@ public class ControlShark : MonoBehaviour
         {
             var position = cam.ScreenToWorldPoint(Input.mousePosition);
             position.z = 0;
-            //dummy.transform.position = position;
 
-            GameObject dummy = new GameObject("dummy");
-            dummy.tag = "RED_TAG";
             dummy.transform.position = position;
-
-            Destroy(dummy, 3.0f);
+            dummy.SetActive(true);
         }
 
         if (Input.GetMouseButtonDown(1))
@@ -40,15 +46,10 @@ public class ControlShark : MonoBehaviour
             var position = cam.ScreenToWorldPoint(Input.mousePosition);
             position.z = 0;
 
-            GameObject boat = new GameObject("boat");
-            boat.tag = "ATTACKER";
             boat.transform.position = position;
-
-            Destroy(boat, 3.0f);
-
-            //GameObject theDummy = SensingUtils.FindInstanceWithinRadius(gameObject, "DUMMY", 500);
-            //if (theDummy != null)
-            //    Destroy(theDummy);
+            boat.SetActive(true);
+            StopAllCoroutines();
+            StartCoroutine(DisableBoat());
         }
 
         if (Input.GetMouseButtonDown(2))
@@ -60,5 +61,12 @@ public class ControlShark : MonoBehaviour
             //chick.transform.position = position;
             //chick.transform.Rotate(0, 0, Random.value * 360);
         }
+    }
+
+    IEnumerator DisableBoat()
+    {
+        yield return new WaitForSeconds(boatTimeToDisappear);
+
+        boat.SetActive(false);
     }
 }

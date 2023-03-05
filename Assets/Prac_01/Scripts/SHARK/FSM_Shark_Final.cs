@@ -68,7 +68,7 @@ public class FSM_Shark_Final : FiniteStateMachine
 
         Transition BoatNoLongerDetected = new Transition("Boat No Longer Detected",
             () => {
-                if (boat.Equals(null))
+            if (SensingUtils.DistanceToTarget(gameObject, boat) > blackboard.boatDetectedRadius)
                     return true;
                 return false;
             }, // write the condition checkeing code in {}

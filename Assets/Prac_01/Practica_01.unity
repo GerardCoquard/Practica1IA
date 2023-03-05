@@ -640,6 +640,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a6322b55a69edb64b9ea52f984fb7424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  boatPrefab: {fileID: 5082732868630042169, guid: fc9e45bbb452c30469d3aedcc027f04a, type: 3}
 --- !u!1 &1409843996
 GameObject:
   m_ObjectHideFlags: 0
@@ -1181,15 +1182,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   fishDetectableRadius: 30
   fishReachedRadius: 1
-  boatDetectedRadius: 500
+  boatDetectedRadius: 30
   homeReachedRadius: 5
   timeToEat: 3
   soundDetectableRadius: 300
-  soundReachedRadius: 20
+  soundReachedRadius: 1
   maxNormalAcceleration: 40
   maxNormalSpeed: 10
-  attractor: {fileID: 0}
-  home: {fileID: 0}
+  attractor: {fileID: 465432573}
+  home: {fileID: 723073069}
 --- !u!114 &2089036635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1230,7 +1231,7 @@ MonoBehaviour:
   wanderOffset: 20
   showWanderGizmos: 0
   wanderTargetOrientation: 0
-  seekWeight: 0.3
+  seekWeight: 0.5
   lookAheadLength: 10
   avoidDistance: 12
   secondaryWhiskerAngle: 30

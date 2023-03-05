@@ -11,8 +11,6 @@ public class FSM_Shark : FiniteStateMachine
 
     private SHARK_BLAKCBOARD blackboard;
     private Arrive arrive;
-    private WanderAround wander;
-    private float time;
     GameObject soundTarget;
 
     public override void OnEnter()
@@ -59,6 +57,7 @@ public class FSM_Shark : FiniteStateMachine
             () => {
                 arrive.enabled = false;
                 arrive.target = null;
+                soundTarget.SetActive(false);
             }  // write on exit logic inisde {}  
         );
 
@@ -83,10 +82,10 @@ public class FSM_Shark : FiniteStateMachine
         () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
 
-        Transition SoundDisappear = new Transition("SoundDisappear",
+        Transition SoundReached = new Transition("SoundReached",
             () => {
-                if (soundTarget.Equals(null))
-                    return true;
+                if (SensingUtils.DistanceToTarget(gameObject, soundTarget) < blackboard.soundReachedRadius)
+                    return true; 
                 return false;
             }, // write the condition checkeing code in {}
             () => { }
@@ -104,7 +103,7 @@ public class FSM_Shark : FiniteStateMachine
 
         AddStates(HUNT, CheckingSound);
         AddTransition(HUNT, SoundHeard, CheckingSound);
-        AddTransition(CheckingSound, SoundDisappear, HUNT);
+        AddTransition(CheckingSound, SoundReached, HUNT);
 
 
 
