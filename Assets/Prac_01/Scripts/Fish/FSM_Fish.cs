@@ -54,9 +54,9 @@ public class FSM_Fish : FiniteStateMachine
         surrogateTarget.transform.SetParent(null);
 
         State FlockingAround = new State("Flocking Around",
-            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); blackboard_global.StartHunger(); }, // write on enter logic inside {}
+            () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.flocking = true; blackboard_global.SetAllWandering(); blackboard_global.StartHunger(); }, // write on enter logic inside {}
             () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
+            () => { flockingAround.enabled = false; fsmFish.flocking = false; }  // write on exit logic inisde {}
         );
 
         State ReachingFood = new State("Reaching Food",
@@ -70,17 +70,6 @@ public class FSM_Fish : FiniteStateMachine
             () => { }, // write in state logic inside {}
             () => { flockingAround.enabled = false; }  // write on exit logic inisde {}
         );
-
-        State Fleeing = new State("Fleeing",
-            () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
-            () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
-            () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
-        );
-        State PreviousState = new State("Previous",
-            () => { }, // write on enter logic inside {}
-            () => { }, // write in state logic inside {}
-            () => { }  // write on exit logic inisde {}
-        );
         State ReachingHome = new State("Reaching Home",
         () => {
                 arrive.enabled = true;
@@ -93,6 +82,18 @@ public class FSM_Fish : FiniteStateMachine
             }, // write on enter logic inside {}
         () => { }, // write in state logic inside {}
         () => { fsmFish.reaching = false; arrive.enabled = false; }  // write on exit logic inisde {}
+        );
+
+        State Fleeing = new State("Fleeing",
+            () => { flee.enabled = true; elpasedTime = 0; context.maxSpeed *= blackboard_global.fleeSpeedMultiplier; }, // write on enter logic inside {}
+            () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
+            () => { flee.enabled = false; lastState = previousState; context.maxSpeed /= blackboard_global.fleeSpeedMultiplier; }  // write on exit logic inisde {}
+        );
+
+        State PreviousState = new State("Previous",
+            () => { }, // write on enter logic inside {}
+            () => { }, // write in state logic inside {}
+            () => { }  // write on exit logic inisde {}
         );
 
 
@@ -126,7 +127,7 @@ public class FSM_Fish : FiniteStateMachine
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition ReachingToWander = new Transition("ReachingToWander",
-            () => { return fsmFish.wandering; }, // write the condition checkeing code in {}
+            () => { return fsmFish.flocking; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition HomeToReach = new Transition("HomeToReach",

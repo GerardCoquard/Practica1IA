@@ -12,7 +12,7 @@ public class FSM_FishFather : FiniteStateMachine
     public GameObject food;
     public bool eating;
     public bool hungry;
-    public bool wandering;
+    public bool flocking;
     public bool waiting;
     public bool homeReached;
     public bool reaching;
