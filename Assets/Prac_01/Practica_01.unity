@@ -147,12 +147,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8844412}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 26.52, y: 11.25, z: 0}
+  m_LocalPosition: {x: 24.2, y: 9.3, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &265843453
 GameObject:
@@ -309,7 +309,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 479303599}
   m_LocalRotation: {x: -0, y: -0, z: 0.39474386, w: 0.91879123}
-  m_LocalPosition: {x: 0.52689934, y: 0.68239975, z: -0.13471816}
+  m_LocalPosition: {x: 0.52689934, y: 0.68239975, z: 0}
   m_LocalScale: {x: 1, y: 4.57444, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -410,6 +410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 627574083}
   - component: {fileID: 627574084}
+  - component: {fileID: 627574085}
   m_Layer: 0
   m_Name: FishSpawner
   m_TagString: Untagged
@@ -447,6 +448,32 @@ MonoBehaviour:
   members: []
   numInstances: 30
   prefab: {fileID: 6845931278036688118, guid: e6fa44353597688409b26591d73dda1d, type: 3}
+--- !u!114 &627574085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627574081}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e9bae622db86e3419232196cf268f00, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  homeAttractor: {fileID: 8844412}
+  foodAttractor: {fileID: 265843453}
+  shark: {fileID: 2089036633}
+  eatRadius: 1.5
+  eatTime: 2
+  homeCloseDistance: 8
+  timeToStopReachHome: 1
+  fleeTime: 0.5
+  fleeDistanceTrigger: 6
+  fleeSpeedMultiplier: 2
+  voids: []
+  hungerCooldown: 8
+  stateBefore: 1
+  fleeController: 0
 --- !u!1 &723073069
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +498,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723073069}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -28.271734, y: -14.548694, z: 0.13471816}
+  m_LocalPosition: {x: -28.271734, y: -14.548694, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -690,7 +717,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1409843996}
   m_LocalRotation: {x: -0, y: -0, z: 0.0521601, w: 0.99863875}
-  m_LocalPosition: {x: 1.9500008, y: -2.8000011, z: -0.13471816}
+  m_LocalPosition: {x: 1.9500008, y: -2.8000011, z: 0}
   m_LocalScale: {x: 4.1641912, y: 4.1641912, z: 4.1641917}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -774,7 +801,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1567709704}
   m_LocalRotation: {x: -0, y: -0, z: 0.90303564, w: 0.4295657}
-  m_LocalPosition: {x: -2.709999, y: -1.250001, z: -0.13471816}
+  m_LocalPosition: {x: -2.709999, y: -1.250001, z: 0}
   m_LocalScale: {x: 4.1641917, y: 4.1641917, z: 4.1641917}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -858,7 +885,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1815495434}
   m_LocalRotation: {x: -0, y: -0, z: 0.6678326, w: 0.7443116}
-  m_LocalPosition: {x: -1.1499996, y: 2.2599993, z: -0.13471816}
+  m_LocalPosition: {x: -1.1499996, y: 2.2599993, z: 0}
   m_LocalScale: {x: 1, y: 0.6536875, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -942,71 +969,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1889652170}
   m_LocalRotation: {x: -0, y: -0, z: 0.6678326, w: 0.7443116}
-  m_LocalPosition: {x: 2.0820007, y: -0.6390009, z: -0.13471816}
+  m_LocalPosition: {x: 2.0820007, y: -0.6390009, z: 0}
   m_LocalScale: {x: 1, y: 0.6536875, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 723073070}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 83.8}
---- !u!1 &1932774140
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1932774142}
-  - component: {fileID: 1932774141}
-  m_Layer: 0
-  m_Name: FishBlackboard
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1932774141
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932774140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6e9bae622db86e3419232196cf268f00, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  homeAttractor: {fileID: 8844412}
-  foodAttractor: {fileID: 265843453}
-  shark: {fileID: 2089036633}
-  eatRadius: 1.5
-  eatTime: 2
-  homeCloseDistance: 8
-  timeToStopReachHome: 1
-  fleeTime: 0.5
-  fleeDistanceTrigger: 6
-  fleeSpeedMultiplier: 2
-  voids: []
-  hungerCooldown: 8
-  stateBefore: 1
-  fleeController: 0
---- !u!4 &1932774142
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932774140}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.8522433, y: -2.4793181, z: -0.3481467}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 7
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1972858364
 GameObject:
   m_ObjectHideFlags: 0
@@ -1084,7 +1053,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1972858364}
   m_LocalRotation: {x: -0, y: -0, z: 0.41230965, w: -0.9110438}
-  m_LocalPosition: {x: 3.5300007, y: 2.7399998, z: -0.13471816}
+  m_LocalPosition: {x: 3.5300007, y: 2.7399998, z: 0}
   m_LocalScale: {x: 4.1641917, y: 4.1641917, z: 4.1641917}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1168,7 +1137,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1976069296}
   m_LocalRotation: {x: -0, y: -0, z: 0.0521601, w: 0.99863875}
-  m_LocalPosition: {x: -5.03, y: 4.02, z: -0.13471816}
+  m_LocalPosition: {x: -5.03, y: 4.02, z: 0}
   m_LocalScale: {x: 4.1641912, y: 4.1641912, z: 4.1641917}
   m_ConstrainProportionsScale: 0
   m_Children: []

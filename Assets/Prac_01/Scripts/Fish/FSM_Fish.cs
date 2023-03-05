@@ -53,7 +53,7 @@ public class FSM_Fish : FiniteStateMachine
         surrogateTarget = transform.GetChild(0).gameObject;
         surrogateTarget.transform.SetParent(null);
 
-        State WanderingAround = new State("Wandering Around",
+        State FlockingAround = new State("Flocking Around",
             () => { flockingAround.enabled = true; flockingAround.attractor = blackboard_global.homeAttractor; elpasedTime = 0; fsmFish.wandering = true; blackboard_global.SetAllWandering(); blackboard_global.StartHunger(); }, // write on enter logic inside {}
             () => { elpasedTime += Time.deltaTime; }, // write in state logic inside {}
             () => { flockingAround.enabled = false; fsmFish.wandering = false; }  // write on exit logic inisde {}
@@ -109,10 +109,6 @@ public class FSM_Fish : FiniteStateMachine
             () => { return fsmFish.hungry; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-        Transition WanderToFlee = new Transition("WanderToFlee",
-            () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
         Transition ReachingToHome = new Transition("ReachingToHome",
             () => {
                 fsmFish.food = SensingUtils.FindRandomInstanceWithinRadius(gameObject, "FOOD", blackboard_global.eatRadius);
@@ -133,41 +129,24 @@ public class FSM_Fish : FiniteStateMachine
             () => { return fsmFish.wandering; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-        Transition ReachingToFlee = new Transition("ReachingToFlee",
-            () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
-            () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
-
-        Transition HomeToFlee = new Transition("HomeToFlee",
-            () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
+        Transition HomeToReach = new Transition("HomeToReach",
+            () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition ReachToEat = new Transition("ReachToEat",
             () => { return SensingUtils.DistanceToTarget(gameObject,surrogateTarget) <= 1f; }, // write the condition checkeing code in {}
             () => { fsmFish.homeReached = true; }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-        Transition ReachToFlee = new Transition("ReachToFlee",
+        Transition AnyToFlee = new Transition("AnyToFlee",
             () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.shark) < blackboard_global.fleeDistanceTrigger; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-        );
-        Transition EatToWait = new Transition("EatToWait",
-            () => { return elpasedTime >= blackboard_global.eatTime; }, // write the condition checkeing code in {}
-            () => {
-                if (fsmFish.food != null)
-                {
-                    fsmFish.food.SetActive(false);
-                    fsmFish.food = null;
-                }
-            }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition FleeToPrevious = new Transition("FleeToPrevious",
             () => { return elpasedTime >= blackboard_global.fleeTime; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-
-
         Transition PreviousToWander = new Transition("PreviousToWander",
-            () => { return lastState == WanderingAround; }, // write the condition checkeing code in {}
+            () => { return lastState == FlockingAround; }, // write the condition checkeing code in {}
             () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
         Transition PreviousToReach = new Transition("PreviousToReach",
@@ -182,12 +161,6 @@ public class FSM_Fish : FiniteStateMachine
         () => { return lastState == ReachingHome; }, // write the condition checkeing code in {}
         () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
         );
-        Transition HomeToReach = new Transition("HomeToReach",
-    () => { return SensingUtils.DistanceToTarget(gameObject, blackboard_global.homeAttractor) < blackboard_global.homeCloseDistance; }, // write the condition checkeing code in {}
-    () => { }  // write the on trigger code in {} if any. Remove line if no on trigger action needed
-);
-
-
 
 
         /* STAGE 3: add states and transitions to the FSM 
@@ -207,22 +180,23 @@ public class FSM_Fish : FiniteStateMachine
 
          */
 
-        AddStates(WanderingAround, ReachingFood, GoingHome, Fleeing, PreviousState, ReachingHome);
+        AddStates(FlockingAround, ReachingFood, GoingHome, Fleeing, PreviousState, ReachingHome);
 
-        AddTransition(WanderingAround, WanderToReaching, ReachingFood);
-        AddTransition(WanderingAround, WanderToFlee, Fleeing);
+        AddTransition(FlockingAround, WanderToReaching, ReachingFood);
+        AddTransition(FlockingAround, AnyToFlee, Fleeing);
         AddTransition(ReachingFood, ReachingToHome, GoingHome);
-        AddTransition(ReachingFood, ReachingToWander, WanderingAround);
-        AddTransition(ReachingFood, ReachingToFlee, Fleeing);
-        AddTransition(GoingHome, HomeToFlee, Fleeing);
+        AddTransition(ReachingFood, ReachingToWander, FlockingAround);
+        AddTransition(ReachingFood, AnyToFlee, Fleeing);
+        AddTransition(GoingHome, AnyToFlee, Fleeing);
         AddTransition(GoingHome, HomeToReach, ReachingHome);
-        AddTransition(ReachingHome,ReachToEat,WanderingAround);
+        AddTransition(ReachingHome,ReachToEat,FlockingAround);
+        AddTransition(ReachingHome,AnyToFlee,Fleeing);
         AddTransition(Fleeing, FleeToPrevious, PreviousState);
-        AddTransition(PreviousState, PreviousToWander, WanderingAround);
+        AddTransition(PreviousState, PreviousToWander, FlockingAround);
         AddTransition(PreviousState, PreviousToReach, ReachingFood);
         AddTransition(PreviousState, PreviousToHome, GoingHome);
-        AddTransition(PreviousState, PreviousToReachHome, GoingHome);
+        AddTransition(PreviousState, PreviousToReachHome, ReachingHome);
 
-        initialState = WanderingAround;
+        initialState = FlockingAround;
     }
 }
